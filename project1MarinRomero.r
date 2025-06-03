@@ -12,6 +12,8 @@ setwd("/Users/marin/OneDrive/Documents/GitHub/PINCclimate")
 
 #Read in your data and save it as an object
 beach <- read.csv("beach_data.csv") #check environment to see if it loaded
+#allows viewing data, helpful for colnames
+View(beach)
 
 #---------Part 2--------------#
 #OK. Now that we've got our data loaded in, let's start answering questions!
@@ -38,7 +40,8 @@ barplot(beach$Weight)
 
 #QUESTION 3: Plot the barplot with Sample names
 #Hint: Click on the "zoom" button above the plot to see all the names
-barplot(beach$Weight, names = beach$Sample)
+#cex fx change label sizes, las switches label axis
+barplot(beach$Weight, names = beach$Sample, cex.names = 0.7, las = 2)
 
 
 
@@ -90,9 +93,11 @@ barplot(beach$Weight, names = beach$Sample, col = "#05fa98")
 #The critical value is under Pr(>F)!
 
 #QUESTION 6: Is there a difference in weight between the animals?
-aov(beach$Weight ~ beach$Animal)
+summary(aov(beach$Weight ~ beach$Animal))
+#other way to code, print out is cleaner
+summary(aov(Weight ~ Animal, data = beach))
 
-#Congrats! You just ran a two-way ANOVA test! These are the results papers are
+#Congrats! You just ran a one-way ANOVA test! These are the results papers are
 #written off of!
 
 #As far as I can tell, aov() and other statistical comparison functions that run
@@ -106,7 +111,8 @@ aov(beach$Weight ~ beach$Animal)
 #---------Part 4--------------#
 #BONUS QUESTION: Is there a difference in weight between tidal zones?
 #weight by tidal zone
-aov(beach$Weight ~ beach$Zone)
+summary(aov(beach$Weight ~ beach$Zone))
 
 #animal weight with tidal zone as an interacting variable
-aov(Weight ~ Animal * Zone, data = beach)
+summary(aov(Weight ~ Animal * Zone, data = beach))
+
