@@ -69,6 +69,8 @@ Tip: You need to remember to assign it to a variable to see the results. Here we
 
 ```{r trimws dataset}
 # Specifying "both" will ensure that extra white spaces will be removed throughout
+unique(vaccine_admin$county)
+
 vaccine_admin$county <- trimws(vaccine_admin$county, which = "both")
 
 ```
@@ -86,7 +88,7 @@ Question: If the date is 01/Jan/2020 (e.g. dd/mmm/yyyy), what would the format b
 random_date <- "15/Jan/2020"
 
 # Fill in the format
-as.Date(random_date, format = "%d/%B/%Y")
+as.Date(random_date, format = "%d/%b/%Y")
 
 ```
 Notes:
@@ -97,6 +99,8 @@ Here, we format administered_date column with the date format
 ```{r formatting dates}
 
 vaccine_admin$administered_date <- as.Date(vaccine_admin$administered_date, format = "%Y-%m-%d")
+
+summary(vaccine_admin)
 
 ```
 
@@ -140,6 +144,7 @@ Answer: *The LA times may have calculated population with a smaller number, but 
 ```{r}
 summary(vaccine_CA)
 tail(vaccine_CA)
+
 ```
 
 
@@ -233,7 +238,7 @@ vaccine_CA$wk_avg <- round(vaccine_CA$wk_avg, digits = 0)
 # So you can na.rm = T to remove the NAs from the plot
 ggplot(data = vaccine_CA, aes(x = administered_date, y = total_doses)) +
   geom_col(fill = "yellowgreen") +
-  scale_y_continuous() +
+  #scale_y_continuous() +
   geom_line(data = vaccine_CA, aes(x = administered_date, y = wk_avg), na.rm = T, color = "darkgreen")
 
 ```
@@ -339,6 +344,25 @@ ggplot(data = vaccine_CA, aes(x = administered_date, y = total_doses)) +
             color = "magenta", alpha = 0.5, size = 0.8) +
   labs(x = "Date of Vaccine", y = "Total Vaccinations", 
        title ="SF Vaccine Data by Day") 
+```
+
+# Making a .pdf
+```{r}
+pdf("SFvaccinations.pdf")
+
+SFplot + labs(x = "Date of Vaccine", y = "Vaccination Rate",
+title ="SF Vaccine Data")
+
+ggplot(data = vaccine_CA, aes(x = administered_date, y = total_doses)) +
+  geom_col(fill = "lightblue") +
+  scale_y_continuous() +
+  geom_line(data = vaccine_CA, aes(x = administered_date, y = wk_avg), na.rm = T, 
+            color = "magenta", alpha = 0.5, size = 0.8) +
+  labs(x = "Date of Vaccine", y = "Total Vaccinations", 
+       title ="SF Vaccine Data by Day")
+
+dev.off()
+
 ```
 
 
